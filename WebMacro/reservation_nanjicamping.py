@@ -32,7 +32,7 @@ class NanjiCamping(Thread):
 
     def _set_driver(self):
         # implicit waits
-        self.driver.implicitly_wait(5)
+        self.driver.implicitly_wait(180)
 
     def login_from_main(self):
         self.driver.get(url='https://yeyak.seoul.go.kr/web/loginForm.do')
@@ -47,7 +47,8 @@ class NanjiCamping(Thread):
         popup = self.driver.find_element(By.XPATH, '//*[@id="contents"]/div[1]/div/div[2]/button/span')
         popup.click()
         # initial screen
-        reserve_btn = self.driver.find_element(By.XPATH, '//*[@id="aform"]/div[1]/div[2]/div/div/a[1]')
+        # reserve_btn = self.driver.find_element(By.XPATH, '//*[@id="aform"]/div[1]/div[2]/div/div/a[1]')
+        reserve_btn = self.driver.find_element(By.XPATH, '//*[@id="cal_20211104"]')
         reserve_btn.click()
         # login window
         Alert(self.driver).accept()
@@ -126,7 +127,7 @@ class NanjiCamping(Thread):
 
         # finalize the reservation
         Alert(self.driver).accept()
-        sleep(5)
+        sleep(30)
 
         self.driver.quit()
 
@@ -141,32 +142,12 @@ if __name__ == '__main__':
     # NanjiCamping(url=urls['10_Dtype'], date='1020').start()
 
     # Friday
-    for i in range(2):
-        NanjiCamping(url=urls['11_Dtype'], date='1126').start()
-        NanjiCamping(url=urls['11_deck'], date='1126').start()
-
-        NanjiCamping(url=urls['11_Dtype'], date='1119').start()
-        NanjiCamping(url=urls['11_deck'], date='1119').start()
-
-        NanjiCamping(url=urls['11_Dtype'], date='1112').start()
-        NanjiCamping(url=urls['11_deck'], date='1112').start()
-
+    for i in range(1):
         NanjiCamping(url=urls['11_Dtype'], date='1105').start()
-        NanjiCamping(url=urls['11_deck'], date='1105').start()
-
-        sleep(2)
-
-    sleep(10)
-
-    # Thursday
-    NanjiCamping(url=urls['11_Dtype'], date='1124').start()
-    NanjiCamping(url=urls['11_deck'], date='1124').start()
-
-    NanjiCamping(url=urls['11_Dtype'], date='1117').start()
-    NanjiCamping(url=urls['11_deck'], date='1117').start()
-
-    NanjiCamping(url=urls['11_Dtype'], date='1110').start()
-    NanjiCamping(url=urls['11_deck'], date='1110').start()
-
-    NanjiCamping(url=urls['11_Dtype'], date='1103').start()
-    NanjiCamping(url=urls['11_deck'], date='1103').start()
+        # NanjiCamping(url=urls['11_deck'], date='1105').start()
+        # NanjiCamping(url=urls['11_Dtype'], date='1112').start()
+        # NanjiCamping(url=urls['11_deck'], date='1112').start()
+        # NanjiCamping(url=urls['11_Dtype'], date='1119').start()
+        # NanjiCamping(url=urls['11_deck'], date='1119').start()
+        # NanjiCamping(url=urls['11_Dtype'], date='1126').start()
+        # NanjiCamping(url=urls['11_deck'], date='1126').start()
