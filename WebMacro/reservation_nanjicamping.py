@@ -83,7 +83,7 @@ class NanjiCamping(Thread):
             except:
                 print('Initial_screen failed... reload the page')
             else:
-                print('Initial_screen successful')
+                # print('Initial_screen successful')
                 break
 
     def macro(self):
@@ -139,10 +139,10 @@ class NanjiCamping(Thread):
                 # finalize the reservation
                 Alert(self.driver).accept()
             except:
-                print('Not successful... trying again')
+                # print('Not successful... trying again')
                 time.sleep(10)
             else:
-                print('Successful!!!')
+                # print('Successful!!!')
                 break
 
         if (c := input()) == 'q':
@@ -153,19 +153,21 @@ class NanjiCamping(Thread):
 if __name__ == '__main__':
     urls = {
         '10_Dtype': 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S210913093907438559',
+        '10_deck': 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S210913093431017213',
         '10_barbecue': 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S210913095611524537',
         '11_deck': 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S211014143810532855',
         '11_Dtype': 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S211014144304124526',
         '11_barbecue': 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S211014151656734620',
     }
-    NanjiCamping(url=urls['10_Dtype'], date='1023').start()
+    NanjiCamping(url=urls['10_Dtype'], date='1030').start()
+    NanjiCamping(url=urls['10_deck'], date='1030').start()
 
     # Barbecue
     # NanjiCamping(url=urls['10_barbecue'], date='1024', type='barbecue11').start()
 
     # Friday
-    NanjiCamping(url=urls['11_Dtype'], date='1105').start()
-    NanjiCamping(url=urls['11_deck'], date='1105').start()
+    # NanjiCamping(url=urls['11_Dtype'], date='1105').start()
+    # NanjiCamping(url=urls['11_deck'], date='1105').start()
     # NanjiCamping(url=urls['11_Dtype'], date='1112').start()
     # NanjiCamping(url=urls['11_deck'], date='1112').start()
     # NanjiCamping(url=urls['11_Dtype'], date='1119').start()
