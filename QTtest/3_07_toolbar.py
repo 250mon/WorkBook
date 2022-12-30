@@ -9,7 +9,7 @@ class MyApp(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        exitAction = QAction(QIcon('exit.png'), 'Exit', self)
+        exitAction = QAction(QIcon('assets/exit.png'), 'Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         # when hovering over the menu, the following message shows up in status bar
         exitAction.setStatusTip('Exit application')
