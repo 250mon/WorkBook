@@ -7,7 +7,7 @@
 !/.gitignore
 !*.py
 !*.ipynb
-!/assets/*
+!**/assets/*
 
 # even if they are in subdirectoreis
 !*/
