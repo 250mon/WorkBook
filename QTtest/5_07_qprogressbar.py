@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QProgressBar
 from PyQt5.QtCore import QBasicTimer
 
 
-class MyApp(QWidget):
+class ProgressBar(QWidget):
 
     def __init__(self):
         super().__init__()
