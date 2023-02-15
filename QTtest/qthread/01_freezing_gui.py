@@ -32,6 +32,7 @@ class Window(QMainWindow):
         self.countBtn.clicked.connect(self.countClicks)
         self.longRunningBtn = QPushButton("Long-Running Task!", self)
         self.longRunningBtn.clicked.connect(self.runLongTask)
+        
         # Set the layout
         layout = QVBoxLayout()
         layout.addWidget(self.clicksLabel)
