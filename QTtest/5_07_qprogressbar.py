@@ -45,5 +45,5 @@ class ProgressBar(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = MyApp()
+    ex = ProgressBar()
     sys.exit(app.exec_())
