@@ -1,11 +1,11 @@
 import sys
-from PyQt5.QtCore import pyqtSignal, QObject
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PySide6.QtCore import Signal, QObject
+from PySide6.QtWidgets import QApplication, QMainWindow
 
 
 class Communicate(QObject):
 
-    closeApp = pyqtSignal()
+    closeApp = Signal()
 
 
 class MyApp(QMainWindow):
@@ -29,4 +29,4 @@ class MyApp(QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

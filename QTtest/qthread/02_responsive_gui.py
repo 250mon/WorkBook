@@ -1,8 +1,8 @@
 import sys
 from time import sleep
 
-from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal
-from PyQt5.QtWidgets import (
+from PySide6.QtCore import Qt, QObject, QThread, pyqtSignal
+from PySide6.QtWidgets import (
     QApplication,
     QLabel,
     QMainWindow,
@@ -94,4 +94,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     win = Window()
     win.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

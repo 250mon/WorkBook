@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, qApp
-from PyQt5.QtGui import QIcon
+from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtGui import QIcon, QAction
 
 
 class MyApp(QMainWindow):
@@ -13,7 +13,7 @@ class MyApp(QMainWindow):
         exitAction.setShortcut('Ctrl+Q')
         # when hovering over the menu, the following message shows up in status bar
         exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(qApp.quit)
+        exitAction.triggered.connect(QApplication.instance().quit)
 
         self.statusBar()
 
@@ -28,4 +28,4 @@ class MyApp(QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

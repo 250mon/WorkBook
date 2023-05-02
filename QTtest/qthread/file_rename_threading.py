@@ -1,10 +1,10 @@
 # file_rename_threading.py
 # Import necessary modules
 import os, sys, time
-from PyQt5.QtWidgets import (QApplication, QWidget, QLabel,
+from PySide6.QtWidgets import (QApplication, QWidget, QLabel,
                              QProgressBar, QLineEdit, QPushButton, QTextEdit,
                              QComboBox, QFileDialog, QGridLayout)
-from PyQt5.QtCore import pyqtSignal, QThread
+from PySide6.QtCore import pyqtSignal, QThread
 
 style_sheet = """
     QProgressBar{

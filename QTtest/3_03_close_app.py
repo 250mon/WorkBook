@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
-from PyQt5.QtCore import QCoreApplication
+from PySide6.QtWidgets import QApplication, QWidget, QPushButton
+from PySide6.QtCore import QCoreApplication
 
 
 class MyApp(QWidget):
@@ -22,4 +22,4 @@ class MyApp(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

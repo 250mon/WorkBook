@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QFrame, QColorDialog
-from PyQt5.QtGui import QColor
+from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QFrame, QColorDialog
+from PySide6.QtGui import QColor
 
 
 class MyApp(QWidget):
@@ -34,4 +34,4 @@ class MyApp(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

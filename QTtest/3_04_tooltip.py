@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QToolTip
-from PyQt5.QtGui import QFont
+from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip
+from PySide6.QtGui import QFont
 
 
 class MyApp(QWidget):
@@ -25,4 +25,4 @@ class MyApp(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtGui import QIcon
+from PySide6.QtWidgets import QApplication, QWidget
+from PySide6.QtGui import QIcon
 
 class MyApp(QWidget):
     def __init__(self):
@@ -17,5 +17,5 @@ class MyApp(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 

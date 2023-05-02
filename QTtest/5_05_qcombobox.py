@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox
+from PySide6.QtWidgets import QApplication, QWidget, QLabel, QComboBox
 
 
 class MyApp(QWidget):
@@ -19,7 +19,7 @@ class MyApp(QWidget):
         cb.addItem('Option4')
         cb.move(50, 50)
 
-        cb.activated[str].connect(self.onActivated)
+        cb.textActivated[str].connect(self.onActivated)
         self.setWindowTitle('QComboBox')
         self.setGeometry(300, 300, 300, 200)
         self.show()
@@ -33,4 +33,4 @@ class MyApp(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

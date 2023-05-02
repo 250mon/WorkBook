@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit
-from PyQt5.QtGui import QIntValidator
+from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit
+from PySide6.QtGui import QIntValidator
 
 
 class MyApp(QWidget):
@@ -36,4 +36,4 @@ class MyApp(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

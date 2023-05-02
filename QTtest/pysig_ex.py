@@ -3,11 +3,11 @@ import signal
 import threading
 import datetime
 
-from PyQt5.QtCore import QObject, pyqtSignal, QTimer, QCoreApplication, QThread, pyqtSlot
+from PySide6.QtCore import QObject, Signal, QTimer, QCoreApplication, QThread, Slot
 
 
 class Worker(QObject):
-    timeChanged = pyqtSignal(object)
+    timeChanged = Signal(object)
 
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
@@ -17,12 +17,12 @@ class Worker(QObject):
 
         self.timer.timeout.connect(self.main_process)
 
-    @pyqtSlot()
+    @Slot()
     def start(self):
         self.timer.start()
         print("Worker thread {}: Start timer".format(threading.get_ident()))
 
-    @pyqtSlot()
+    @Slot()
     def main_process(self):
         timestamp = datetime.datetime.now()
         print(
@@ -45,7 +45,7 @@ class WorkerThread(QObject):
         self.thread.finished.connect(self.emitter.deleteLater)
         self.emitter.timeChanged.connect(self.show_time)
 
-    @pyqtSlot()
+    @Slot()
     def start(self):
         self.thread.start()
 
@@ -55,7 +55,7 @@ class WorkerThread(QObject):
             self.thread.wait()
             print("Exit thread")
 
-    @pyqtSlot(object)
+    @Slot(object)
     def show_time(self, timestamp):
         print(
             "Main   thread {}: {}".format(
@@ -82,4 +82,4 @@ if __name__ == "__main__":
     print("Main    thread {}".format(threading.get_ident()))
     emitter = WorkerThread()
     emitter.start()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QWidget
+from PySide6.QtWidgets import QApplication, QWidget
 
 # Only needed for access to command line arguments
 import sys
@@ -13,7 +13,7 @@ window = QWidget()
 window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
 # Start the event loop.
-sys.exit(app.exec_())
+sys.exit(app.exec())
 
 
 # Your application won't reach here until you exit and the event

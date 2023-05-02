@@ -1,7 +1,7 @@
 import sys
 import time
-from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal
-from PyQt5.QtWidgets import (
+from PySide6.QtCore import Qt, QObject, QThread, pyqtSignal
+from PySide6.QtWidgets import (
     QApplication,
     QSpinBox,
     QPushButton,
@@ -57,4 +57,4 @@ app = QApplication(sys.argv)
 win = frmMain()
 
 win.show()
-sys.exit(app.exec_())
+sys.exit(app.exec())

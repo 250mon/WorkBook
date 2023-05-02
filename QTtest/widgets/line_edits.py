@@ -1,9 +1,9 @@
 # line_edits.py
 # Import necessary modules
 import sys
-from PyQt5.QtWidgets import (QApplication, QWidget,
+from PySide6.QtWidgets import (QApplication, QWidget,
                              QLabel, QLineEdit, QPushButton)
-from PyQt5.QtCore import Qt
+from PySide6.QtCore import Qt
 
 
 class MainWindow(QWidget):

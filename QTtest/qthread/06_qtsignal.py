@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
 
 
 class widgetB(QtWidgets.QWidget):
@@ -96,4 +96,4 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     main = mainwindow()
     main.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QProgressBar
-from PyQt5.QtCore import QBasicTimer
+from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QProgressBar
+from PySide6.QtCore import QBasicTimer
 
 
 class ProgressBar(QWidget):
@@ -46,4 +46,4 @@ class ProgressBar(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

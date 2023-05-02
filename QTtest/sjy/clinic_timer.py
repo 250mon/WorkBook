@@ -1,6 +1,6 @@
 import sys
 import datetime
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
     QSlider,
@@ -8,20 +8,21 @@ from PyQt5.QtWidgets import (
     QLabel,
     QPushButton,
     QLineEdit,
-    QShortcut,
     QDialog,
-    QDialogButtonBox,
     QVBoxLayout
 )
-from PyQt5.QtCore import Qt, QBasicTimer
-from PyQt5.QtGui import QKeySequence, QIntValidator
+from PySide6.QtCore import Qt, QBasicTimer, Signal
+from PySide6.QtGui import QKeySequence, QIntValidator, QShortcut
 
 
 class CustomDialog(QDialog):
-    def __init__(self):
+
+    pt_id_entered_sig = Signal(str)
+    def __init__(self, parent=None):
         super().__init__()
 
-        self.pt_id = None
+        self.main = parent
+        self.id = None
 
         self.setWindowTitle("환자 ID 입력")
 
@@ -29,23 +30,16 @@ class CustomDialog(QDialog):
         self.pt_id_le.show()
         self.pt_id_le.setValidator(QIntValidator())
         self.pt_id_le.returnPressed.connect(self.pt_id_entered)
-
-        self.btn_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        self.btn_box.accepted.connect(self.accept)
-        self.btn_box.rejected.connect(self.reject)
+        self.pt_id_entered_sig[str].connect(parent.pt_id_lbl.setText)
+        self.pt_id_entered_sig.connect(self.accept)
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.pt_id_le)
-        self.layout.addWidget(self.btn_box)
         self.setLayout(self.layout)
 
-    def pt_id_entered(self, text):
-        self.pt_id = self.pt_id_le.text()
-        print(self.pt_id_le.text())
-
-    def get_id(self):
-        return self.pt_id
-
+    def pt_id_entered(self):
+        self.id = self.pt_id_le.text()
+        self.pt_id_entered_sig.emit(self.id)
 
 class MyWindow(QMainWindow):
     # ALARM_TIME * 100 milliseconds total
@@ -57,8 +51,11 @@ class MyWindow(QMainWindow):
         self.initUI()
 
     def initUI(self):
+        self.pt_id_lbl = QLabel('ID', self, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.pt_id_lbl.setGeometry(0, 0, 100, 10)
+
         self.progress_bar = QProgressBar(self)
-        self.progress_bar.setGeometry(0, 0, 1500, 10)
+        self.progress_bar.setGeometry(100, 0, 1500, 10)
         self.progress_bar.setTextVisible(False)
 
         self.slider = QSlider(Qt.Horizontal, self)
@@ -88,6 +85,9 @@ class MyWindow(QMainWindow):
 
         # Shortcuts
         # start/stop and restart
+        self.id_sc = QShortcut(QKeySequence('I'), self)
+        self.id_sc.activated.connect(self.show_dialog)
+        self.id_sc.activated.connect(self.reset)
         self.start_sc = QShortcut(QKeySequence('S'), self)
         self.start_sc.activated.connect(self.start)
         self.restart_sc = QShortcut(QKeySequence('R'), self)
@@ -122,12 +122,11 @@ class MyWindow(QMainWindow):
             self.setGeometry(0, 0, 1500, 10)
 
     def show_dialog(self):
-        dlg = CustomDialog()
+        dlg = CustomDialog(self)
         if dlg.exec():
             print('success')
         else:
             print('cancel')
-        print(dlg.get_id())
 
     def timerEvent(self, a0: 'QTimerEvent') -> None:
         if self.step >= 100:
@@ -171,7 +170,7 @@ def main():
     app = QApplication(sys.argv)
     window = MyWindow()
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget
+from PySide6.QtWidgets import QApplication, QWidget
+from PySide6.QtGui import QScreen
 
 
 class MyApp(QWidget):
@@ -18,7 +19,7 @@ class MyApp(QWidget):
         # qr stores the info about the window size, position..
         qr = self.frameGeometry()
         # find out the center of the screen
-        cp = QDesktopWidget().availableGeometry().center()
+        cp = QScreen().availableGeometry().center()
         # set the position of qr to cp
         qr.moveCenter(cp)
         # move the window to a new qr
@@ -28,4 +29,4 @@ class MyApp(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

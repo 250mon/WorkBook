@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtCore import QDate, Qt
+from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtCore import QDate, QLocale
 
 
 class MyApp(QMainWindow):
@@ -11,7 +11,8 @@ class MyApp(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.statusBar().showMessage(self.date.toString(Qt.DefaultLocaleLongDate))
+        locale = QLocale()
+        self.statusBar().showMessage(locale.toString(self.date, QLocale.FormatType.LongFormat))
 
         self.setWindowTitle('Date')
         self.setGeometry(300, 300, 400, 200)
@@ -21,4 +22,4 @@ class MyApp(QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

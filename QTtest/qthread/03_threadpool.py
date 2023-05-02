@@ -3,8 +3,8 @@ import random
 import sys
 import time
 
-from PyQt5.QtCore import QRunnable, Qt, QThreadPool
-from PyQt5.QtWidgets import (
+from PySide6.QtCore import QRunnable, Qt, QThreadPool
+from PySide6.QtWidgets import (
     QApplication,
     QLabel,
     QMainWindow,
@@ -66,4 +66,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     win = Window()
     win.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

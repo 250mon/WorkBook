@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+from PySide6.QtWidgets import QApplication, QWidget, QLabel
 
 
 class MyApp(QWidget):
@@ -23,8 +23,9 @@ class MyApp(QWidget):
         self.show()
 
     def mouseMoveEvent(self, e):
-        x = e.x()
-        y = e.y()
+        position = e.position()
+        x = position.x()
+        y = position.y()
 
         text = 'x: {0}, y: {1}'.format(x, y)
         self.label.setText(text)
@@ -34,4 +35,4 @@ class MyApp(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
