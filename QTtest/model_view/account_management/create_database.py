@@ -65,6 +65,11 @@ class CreateEmployeeData:
         employee_id = employee_ids.pop()
         query.addBindValue(employee_id)
         query.addBindValue(f_name)
+        query.addBindValue(l_name)
+        query.addBindValue(email)
+        query.addBindValue(dept)
+        query.addBindValue(country_id)
+        query.exec()
 
     # Create data for the second table, countries
     country_query = QSqlQuery()
