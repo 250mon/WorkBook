@@ -31,7 +31,7 @@ class PandasModel(QAbstractTableModel):
             return len(self._dataframe.columns)
         return 0
 
-    def data(self, index: QModelIndex, role=Qt.ItemDataRole) -> str:
+    def data(self, index: QModelIndex, role=Qt.ItemDataRole) -> str or None:
         """Override method from QAbstractTableModel
 
         Return data cell from the pandas DataFrame
@@ -44,9 +44,8 @@ class PandasModel(QAbstractTableModel):
 
         return None
 
-    def headerData(
-        self, section: int, orientation: Qt.Orientation, role: Qt.ItemDataRole
-    ) -> str:
+    def headerData(self, section: int, orientation: Qt.Orientation,
+                   role: Qt.ItemDataRole) -> str or None:
         """Override method from QAbstractTableModel
 
         Return dataframe index as vertical header data and columns as horizontal header data.
@@ -62,16 +61,15 @@ class PandasModel(QAbstractTableModel):
 
 
 if __name__ == "__main__":
-
     app = QApplication(sys.argv)
 
-    df = pd.read_csv("../iris.csv")
+    df = pd.read_csv("iris.csv")
 
     view = QTableView()
     view.resize(800, 500)
     view.horizontalHeader().setStretchLastSection(True)
     view.setAlternatingRowColors(True)
-    view.setSelectionBehavior(QTableView.SelectRows)
+    view.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
 
     model = PandasModel(df)
     view.setModel(model)
