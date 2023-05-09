@@ -11,6 +11,7 @@ class CreateEmployeeData:
     database = QSqlDatabase.addDatabase("QSQLITE")
     database.setDatabaseName("files/accounts.db")
     if not database.open():
+        print(database.lastError())
         print("Unable to open data source file.")
         sys.exit(1)  # Error code 1 - signifies error
 
