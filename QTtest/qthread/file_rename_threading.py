@@ -89,7 +89,7 @@ class MainWindow(QWidget):
 
         self.change_name_edit = QLineEdit()
         self.change_name_edit.setToolTip("""<p>Files will be appended with numerical
-         values. For example: filename<b>01</b>.jpg</p>""")
+         values. For parts_table_view: filename<b>01</b>.jpg</p>""")
         self.change_name_edit.setPlaceholderText("Change file names to…")
 
         file_exts = [".jpg", ".jpeg", ".png", ".gif", ".txt"]
