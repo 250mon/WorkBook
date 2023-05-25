@@ -37,7 +37,7 @@ class MainWindow(QWidget):
 
     def loadCSVFile(self):
         """Load header and rows from CSV file."""
-        file_name = "files/parts.csv"
+        file_name = "files/numbers.csv"
 
         with open(file_name, "r") as csv_f:
             reader = csv.reader(csv_f)
