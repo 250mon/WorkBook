@@ -1,5 +1,8 @@
 import sys
-from PySide6.QtWidgets import (QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit)
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QGridLayout, QLabel,
+    QLineEdit, QTextEdit
+)
 
 
 class MyApp(QWidget):
