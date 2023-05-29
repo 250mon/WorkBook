@@ -1,8 +1,47 @@
 import sys, csv
-from PySide6.QtWidgets import (QApplication, QWidget,
-                               QTableView, QAbstractItemView, QVBoxLayout)
-from PySide6.QtGui import (QStandardItemModel, QStandardItem)
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QTableView, QAbstractItemView,
+    QVBoxLayout, QStyledItemDelegate, QStyleOptionViewItem,
+    QSpinBox
+)
+from PySide6.QtGui import QStandardItemModel, QStandardItem
+from PySide6.QtCore import QModelIndex, Qt, QAbstractItemModel
 
+
+class SpinBoxDelegate(QStyledItemDelegate):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+    def createEditor(self,
+                     parent: QWidget,
+                     option: QStyleOptionViewItem,
+                     index: QModelIndex) -> QWidget:
+        editor = QSpinBox(parent)
+        editor.setFrame(False)
+        editor.setMinimum(0)
+        editor.setMaximum(100)
+
+        return editor
+
+    def setEditorData(self,
+                      editor: QSpinBox,
+                      index: QModelIndex) -> None:
+        value = int(index.data(Qt.EditRole))
+        editor.setValue(value)
+
+    def setModelData(self,
+                     editor: QSpinBox,
+                     model: QAbstractItemModel,
+                     index: QModelIndex) -> None:
+        editor.interpretText()
+        value = editor.value()
+        model.setData(index, value, Qt.EditRole)
+
+    def updateEditorGeometry(self,
+                             editor: QSpinBox,
+                             option: QStyleOptionViewItem,
+                             index: QModelIndex) -> None:
+        editor.setGeometry(option.rect)
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -26,6 +65,9 @@ class MainWindow(QWidget):
         table_view.setSelectionMode(
             QAbstractItemView.SelectionMode.ExtendedSelection)
         table_view.setModel(self.model)
+
+        delegate = SpinBoxDelegate(self)
+        table_view.setItemDelegate(delegate)
 
         # Set initial row and column values
         self.model.setRowCount(3)
