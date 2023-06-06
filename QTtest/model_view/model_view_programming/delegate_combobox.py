@@ -6,7 +6,8 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from PySide6.QtCore import QModelIndex, Qt, QAbstractItemModel
-
+import pandas as pd
+from pandas_model import PandasModel
 
 class ComboBoxDelegate(QStyledItemDelegate):
     def __init__(self, parent=None):
@@ -63,26 +64,27 @@ class MainWindow(QWidget):
         """Set up the application's GUI."""
         self.setGeometry(100, 100, 450, 300)
         self.setWindowTitle("ComboBox Delegate Example")
+        # self.loadCSVFile()
+        self.loadCSVtoDF()
         self.setupMainWindow()
-        self.loadCSVFile()
         self.show()
 
     def setupMainWindow(self):
         """Create and arrange widgets in the main window"""
-        self.model = QStandardItemModel()
+        # self.model = QStandardItemModel()
 
         table_view = QTableView()
         table_view.setSelectionMode(
             QAbstractItemView.SelectionMode.ExtendedSelection)
         table_view.setModel(self.model)
 
-        delegate = ComboBoxDelegate(self)
+        delegate = ComboBoxDelegate(table_view)
         # table_view.setItemDelegate(delegate)
         table_view.setItemDelegateForColumn(1, delegate)
 
         # Set initial row and column values
-        self.model.setRowCount(3)
-        self.model.setColumnCount(4)
+        # self.model.setRowCount(3)
+        # self.model.setColumnCount(4)
 
         main_v_box = QVBoxLayout()
         main_v_box.addWidget(table_view)
@@ -99,6 +101,10 @@ class MainWindow(QWidget):
             for i, row in enumerate(csv.reader(csv_f)):
                 items = [QStandardItem(item) for item in row]
                 self.model.insertRow(i, items)
+
+    def loadCSVtoDF(self):
+        df = pd.read_csv("files/numbers.csv")
+        self.model = PandasModel(df)
 
 
 if __name__ == '__main__':
