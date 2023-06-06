@@ -2,43 +2,53 @@ import sys, csv
 from PySide6.QtWidgets import (
     QApplication, QWidget, QTableView, QAbstractItemView,
     QVBoxLayout, QStyledItemDelegate, QStyleOptionViewItem,
-    QSpinBox
+    QComboBox
 )
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from PySide6.QtCore import QModelIndex, Qt, QAbstractItemModel
 
 
-class SpinBoxDelegate(QStyledItemDelegate):
+class ComboBoxDelegate(QStyledItemDelegate):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.combo_box_items = ['1', '2', '3', '4', '5']
 
     def createEditor(self,
                      parent: QWidget,
                      option: QStyleOptionViewItem,
                      index: QModelIndex) -> QWidget:
-        editor = QSpinBox(parent)
-        editor.setFrame(False)
-        editor.setMinimum(0)
-        editor.setMaximum(100)
-
+        editor = QComboBox(parent)
+        editor.addItems(self.combo_box_items)
         return editor
 
     def setEditorData(self,
-                      editor: QSpinBox,
+                      editor: QComboBox,
                       index: QModelIndex) -> None:
-        value = int(index.data(Qt.EditRole))
-        editor.setValue(value)
+
+        current_value = index.data(Qt.EditRole)
+        idx = self.combo_box_items.index(current_value)
+        editor.setCurrentIndex(idx)
+
+        # combo_box_items = ['t1', 'a2', 'b5']
+        # current_value = index.data(Qt.EditRole)
+        # if current_value not in combo_box_items:
+        #     values = [current_value] + combo_box_items
+        #     editor.addItems(values)
+        # else:
+        #     idx = combo_box_items.index(current_value)
+        #     editor.addItems(combo_box_items)
+        #     editor.setCurrentIndex(idx)
+
 
     def setModelData(self,
-                     editor: QSpinBox,
+                     editor: QComboBox,
                      model: QAbstractItemModel,
                      index: QModelIndex) -> None:
-        editor.interpretText()
-        value = editor.value()
+        value = editor.currentText()
         model.setData(index, value, Qt.EditRole)
 
     def updateEditorGeometry(self,
-                             editor: QSpinBox,
+                             editor: QComboBox,
                              option: QStyleOptionViewItem,
                              index: QModelIndex) -> None:
         editor.setGeometry(option.rect)
@@ -52,7 +62,7 @@ class MainWindow(QWidget):
     def initializeUI(self):
         """Set up the application's GUI."""
         self.setGeometry(100, 100, 450, 300)
-        self.setWindowTitle("Model and View Example")
+        self.setWindowTitle("ComboBox Delegate Example")
         self.setupMainWindow()
         self.loadCSVFile()
         self.show()
@@ -66,8 +76,9 @@ class MainWindow(QWidget):
             QAbstractItemView.SelectionMode.ExtendedSelection)
         table_view.setModel(self.model)
 
-        delegate = SpinBoxDelegate(self)
-        table_view.setItemDelegate(delegate)
+        delegate = ComboBoxDelegate(self)
+        # table_view.setItemDelegate(delegate)
+        table_view.setItemDelegateForColumn(1, delegate)
 
         # Set initial row and column values
         self.model.setRowCount(3)
