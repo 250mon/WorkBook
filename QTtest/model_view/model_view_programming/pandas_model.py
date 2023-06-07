@@ -1,8 +1,9 @@
+import sys
+from typing import List
 import pandas as pd
 
 from PySide6.QtWidgets import QTableView, QApplication
 from PySide6.QtCore import QAbstractTableModel, Qt, QModelIndex
-import sys
 
 
 class PandasModel(QAbstractTableModel):
@@ -11,6 +12,7 @@ class PandasModel(QAbstractTableModel):
     def __init__(self, dataframe: pd.DataFrame, parent=None):
         QAbstractTableModel.__init__(self, parent)
         self._dataframe = dataframe
+        self.editable_cols = []
 
     def rowCount(self, parent=QModelIndex()) -> int:
         """ Override method from QAbstractTableModel
@@ -59,11 +61,30 @@ class PandasModel(QAbstractTableModel):
 
         return None
 
+    def setData(self,
+                index: QModelIndex,
+                value: str,
+                role=Qt.EditRole):
+        if index.isValid() and role == Qt.EditRole:
+            self._dataframe.iloc[index.row(), index.column()] = value
+            self.dataChanged.emit(index, index)
+            return True
+        return False
+
+    def flags(self, index: QModelIndex):
+        if index.column() in self.editable_cols:
+            return Qt.ItemIsEnabled | Qt.ItemIsEditable | Qt.ItemIsSelectable
+        else:
+            return Qt.ItemIsEnabled | Qt.ItemIsSelectable
+
+    def set_editable_cols(self, cols: List):
+        self.editable_cols = cols
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    df = pd.read_csv("iris.csv")
+    df = pd.read_csv("files/numbers.csv")
 
     view = QTableView()
     view.resize(800, 500)
@@ -72,6 +93,7 @@ if __name__ == "__main__":
     view.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
 
     model = PandasModel(df)
+    model.set_editable_cols([2])
     view.setModel(model)
     view.show()
     app.exec()
