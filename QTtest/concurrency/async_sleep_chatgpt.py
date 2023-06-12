@@ -1,24 +1,25 @@
 import sys
 import asyncio
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QVBoxLayout
+
+# Thi code NOT working
 
 class AsyncQApplication(QApplication):
     def __init__(self, args):
         super().__init__(args)
-        self.loop = asyncio.get_event_loop()
-        self.count = 0
+        self.loop = asyncio.new_event_loop()
 
-    async def exec(self):
-        await self.loop.create_task(self.asyncio_loop())
+    def exec(self):
+        self.loop.run_until_complete(self.asyncio_loop())
         super().exec()
 
     async def asyncio_loop(self):
-        label = self.activeWindow().findChild(QLabel, "myLabel")
         while True:
-            label.setText(f"Updated text {self.count}")
-            self.count += 1
-            print(self.count)
             await asyncio.sleep(1)  # Update the label every 1 second
+            label = self.activeWindow().findChild(QLabel, "myLabel")
+            if label is not None:
+                label.setText(f"Updated text")
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -26,15 +27,20 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("PyQt Asyncio Example")
         self.resize(300, 200)
 
-        label = QLabel("Initial text", self)
-        label.setObjectName("myLabel")
-        label.setGeometry(50, 50, 200, 50)
+        widget = QWidget()
+        self.setCentralWidget(widget)
+        layout = QVBoxLayout(widget)
 
-async def main():
-    app = AsyncQApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    await app.exec()
+        self.q_label = QLabel("Initial text", self)
+        self.q_label.setObjectName("myLabel")
+        # self.q_label.setGeometry(50, 50, 200, 50)
+        layout.addWidget(self.q_label, alignment=Qt.AlignmentFlag.AlignCenter)
+
+
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    app = AsyncQApplication(sys.argv)
+    # app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.exec()
