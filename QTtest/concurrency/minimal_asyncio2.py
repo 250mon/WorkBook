@@ -21,10 +21,15 @@ class MainWindow(QMainWindow):
         self.count_2sec = 0
         self.id = 0
 
-        widget = QWidget()
-        self.setCentralWidget(widget)
-        vbox = QVBoxLayout(widget)
-        hbox = QHBoxLayout(widget)
+        center_widget = QWidget(self)
+        center_widget.setObjectName('center_widget')
+        self.setCentralWidget(center_widget)
+        vbox = QVBoxLayout(center_widget)
+        vbox.setObjectName('vbox')
+        hbox = QHBoxLayout()
+        hbox.setObjectName('hbox')
+        vbox.addLayout(hbox)
+        center_widget.setLayout(vbox)
 
         self.text = QLabel("5 sec wait counts: 0")
         vbox.addWidget(self.text, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -39,7 +44,6 @@ class MainWindow(QMainWindow):
         async_trigger2.clicked.connect(lambda: self.async_start(2))
         hbox.addWidget(async_trigger2)
 
-        vbox.addLayout(hbox)
         self.resize(500, 200)
 
 
@@ -56,7 +60,7 @@ class MainWindow(QMainWindow):
         else:
             self.count_2sec += 1
             self.text2.setText(f"2 sec wait counts: {self.count_2sec}")
-        self.done_signal.emit(wait_time, id)
+        self.done_signal.emit(id)
 
 
 class AsyncHelper(QObject):
@@ -131,7 +135,8 @@ class AsyncHelper(QObject):
             Upon handling this event, a function will be called that
             resumes the asyncio event loop. """
         self.loop.stop()
-        QApplication.postEvent(self.reenter_qt, self.ReenterQtEvent(self.continue_loop(id)))
+        QApplication.postEvent(self.reenter_qt,
+                               self.ReenterQtEvent(lambda: self.continue_loop(id)))
 
 
 if __name__ == "__main__":
