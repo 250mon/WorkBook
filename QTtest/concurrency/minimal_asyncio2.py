@@ -9,6 +9,9 @@ import asyncio
 import signal
 import sys
 
+# maximum number of concurrent async functions
+MAX_CONCURRENCY = 100
+
 class MainWindow(QMainWindow):
 
     start_signal = Signal(int, int)
@@ -49,10 +52,12 @@ class MainWindow(QMainWindow):
 
     @Slot(int)
     def async_start(self, wait_time):
-        self.start_signal.emit(wait_time, self.id)
+        self.start_signal.emit(self.id, wait_time)
         self.id += 1
+        if self.id > MAX_CONCURRENCY:
+            self.id = 0
 
-    async def set_text(self, wait_time, id):
+    async def set_text(self, id, wait_time):
         await asyncio.sleep(wait_time)
         if wait_time == 5:
             self.count_5sec += 1
@@ -96,14 +101,14 @@ class AsyncHelper(QObject):
             self.worker.done_signal.connect(self.on_worker_done)
 
     @Slot(int, int)
-    def on_worker_started(self, wait_time, id):
+    def on_worker_started(self, id, wait_time):
         """ To use asyncio and Qt together, one must run the asyncio
             event loop as a "guest" inside the Qt "host" event loop. """
         if not self.entry:
             raise Exception("No entry point for the asyncio event loop was set.")
         asyncio.set_event_loop(self.loop)
         # self.loop.create_task(self.entry(wait_time))
-        self.loop.create_task(self.entry(wait_time, id))
+        self.loop.create_task(self.entry(id, wait_time))
         self.loop.call_soon(lambda: self.next_guest_run_schedule(id))
         self.done[id] = False  # Set this explicitly as we might want to restart the guest run.
         self.loop.run_forever()
