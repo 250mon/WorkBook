@@ -1,8 +1,8 @@
 import sys
 from PySide6.QtWidgets import (
     QApplication, QWidget, QTableView, QAbstractItemView,
-    QVBoxLayout, QSpinBox, QLabel, QLineEdit, QTextEdit,
-    QPushButton, QDataWidgetMapper, QGridLayout
+    QHBoxLayout, QSpinBox, QLabel, QLineEdit, QTextEdit,
+    QPushButton, QDataWidgetMapper, QGridLayout, QRadioButton
 )
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 
@@ -18,12 +18,20 @@ class MainWindow(QWidget):
         self.addressEdit = QTextEdit()
         self.ageLabel = QLabel("A&ge (in years):")
         self.ageSpinBox = QSpinBox()
+        self.vailidityLabel = QLabel("&Validity")
+        self.validRadioButton = QRadioButton("Valid")
+        self.invalidRadioButton = QRadioButton("Invalid")
         self.nextButton = QPushButton("&Next")
         self.previousButton = QPushButton("&Previous")
 
         self.nameLabel.setBuddy(self.nameEdit)
         self.addressLabel.setBuddy(self.addressEdit)
         self.ageLabel.setBuddy(self.ageSpinBox)
+
+        self.hbox = QHBoxLayout()
+        self.hbox.addWidget(self.validRadioButton)
+        self.hbox.addWidget(self.invalidRadioButton)
+
         self.addMapper()
         self.initializeUI()
 
@@ -40,6 +48,7 @@ class MainWindow(QWidget):
             "<qt>Research Station<br/>Base Camp<br/>Big Mountain</qt>"
         ]
         ages = ["20", "31", "32", "19", "26" ]
+        validity = [True, False, True, True, True]
         for row in range(5):
           item = QStandardItem(names[row])
           self.model.setItem(row, 0, item)
@@ -47,6 +56,9 @@ class MainWindow(QWidget):
           self.model.setItem(row, 1, item)
           item = QStandardItem(ages[row])
           self.model.setItem(row, 2, item)
+          item = QStandardItem(validity[row])
+          self.model.setItem(row, 3, item)
+
 
     def addMapper(self):
         self.mapper = QDataWidgetMapper(self)
@@ -54,6 +66,7 @@ class MainWindow(QWidget):
         self.mapper.addMapping(self.nameEdit, 0)
         self.mapper.addMapping(self.addressEdit, 1)
         self.mapper.addMapping(self.ageSpinBox, 2)
+        self.mapper.addMapping(self.validRadioButton, 3)
 
         self.previousButton.clicked.connect(self.mapper.toPrevious)
         self.nextButton.clicked.connect(self.mapper.toNext)
@@ -73,6 +86,7 @@ class MainWindow(QWidget):
         layout.addWidget(self.nextButton, 1, 2, 1, 1)
         layout.addWidget(self.ageLabel, 3, 0, 1, 1)
         layout.addWidget(self.ageSpinBox, 3, 1, 1, 1)
+        layout.addLayout(self.hbox, 4, 1, 1, 1)
         self.setLayout(layout)
 
         self.setWindowTitle("Simple Widget Mapper")
