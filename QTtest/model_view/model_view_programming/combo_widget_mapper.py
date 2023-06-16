@@ -1,11 +1,10 @@
 import sys
 from PySide6.QtWidgets import (
-    QApplication, QWidget, QTableView, QAbstractItemView,
-    QHBoxLayout, QSpinBox, QLabel, QLineEdit, QTextEdit,
-    QPushButton, QDataWidgetMapper, QGridLayout, QRadioButton,
-    QComboBox
+    QApplication, QWidget, QLabel, QLineEdit, QTextEdit,
+    QPushButton, QDataWidgetMapper, QGridLayout, QComboBox
 )
 from PySide6.QtGui import QStandardItemModel, QStandardItem
+from PySide6.QtCore import QStringListModel
 
 
 class MainWindow(QWidget):
@@ -17,39 +16,44 @@ class MainWindow(QWidget):
         self.nameEdit = QLineEdit()
         self.addressLabel = QLabel("&Address:")
         self.addressEdit = QTextEdit()
-        self.ageLabel = QLabel("A&ge (in years):")
-        self.ageSpinBox = QSpinBox()
+        self.typeLabel = QLabel("&Type:")
+        self.typeComboBox = QComboBox()
         self.nextButton = QPushButton("&Next")
         self.previousButton = QPushButton("&Previous")
 
         self.nameLabel.setBuddy(self.nameEdit)
         self.addressLabel.setBuddy(self.addressEdit)
-        self.ageLabel.setBuddy(self.ageSpinBox)
+        self.typeLabel.setBuddy(self.typeComboBox)
+
+        self.typeComboBox.setModel(self.typeModel)
 
         self.addMapper()
         self.initializeUI()
 
 
     def setupModel(self):
+        items = ["Home", "Work", "Other"]
+        self.typeModel = QStringListModel(items)
+
         self.model = QStandardItemModel(5, 3, self)
         names = ['Alice', 'Bob', 'Carol', 'Donald', 'Emma']
         addresses = [
             "<qt>123 Main Street<br/>Market Town</qt>",
             "<qt>PO Box 32<br/>Mail Handling Service"
-                 "<br/>Service City</qt>",
+            "<br/>Service City</qt>",
             "<qt>The Lighthouse<br/>Remote Island</qt>",
             "<qt>47338 Park Avenue<br/>Big City</qt>",
             "<qt>Research Station<br/>Base Camp<br/>Big Mountain</qt>"
         ]
-        ages = ["20", "31", "32", "19", "26" ]
+        types = ["0", "1", "2", "0", "2"]
 
         for row in range(5):
-          item = QStandardItem(names[row])
-          self.model.setItem(row, 0, item)
-          item = QStandardItem(addresses[row])
-          self.model.setItem(row, 1, item)
-          item = QStandardItem(ages[row])
-          self.model.setItem(row, 2, item)
+            item = QStandardItem(names[row])
+            self.model.setItem(row, 0, item)
+            item = QStandardItem(addresses[row])
+            self.model.setItem(row, 1, item)
+            item = QStandardItem(types[row])
+            self.model.setItem(row, 2, item)
 
 
     def addMapper(self):
@@ -57,7 +61,7 @@ class MainWindow(QWidget):
         self.mapper.setModel(self.model)
         self.mapper.addMapping(self.nameEdit, 0)
         self.mapper.addMapping(self.addressEdit, 1)
-        self.mapper.addMapping(self.ageSpinBox, 2)
+        self.mapper.addMapping(self.typeComboBox, 2, b'currentIndex')
 
         self.previousButton.clicked.connect(self.mapper.toPrevious)
         self.nextButton.clicked.connect(self.mapper.toNext)
@@ -75,11 +79,11 @@ class MainWindow(QWidget):
         layout.addWidget(self.addressLabel, 1, 0, 1, 1)
         layout.addWidget(self.addressEdit, 1, 1, 2, 1)
         layout.addWidget(self.nextButton, 1, 2, 1, 1)
-        layout.addWidget(self.ageLabel, 3, 0, 1, 1)
-        layout.addWidget(self.ageSpinBox, 3, 1, 1, 1)
+        layout.addWidget(self.typeLabel, 3, 0, 1, 1)
+        layout.addWidget(self.typeComboBox, 3, 1, 1, 1)
         self.setLayout(layout)
 
-        self.setWindowTitle("Simple Widget Mapper")
+        self.setWindowTitle("Combo Widget Mapper")
         self.mapper.toFirst()
 
         self.show()
