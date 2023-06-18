@@ -18,8 +18,10 @@ class MainWindow(QWidget):
         self.addressEdit = QTextEdit()
         self.typeLabel = QLabel("&Type:")
         self.typeComboBox = QComboBox()
+
         self.nextButton = QPushButton("&Next")
         self.previousButton = QPushButton("&Previous")
+        self.newButton = QPushButton("&New")
 
         self.nameLabel.setBuddy(self.nameEdit)
         self.addressLabel.setBuddy(self.addressEdit)
@@ -65,6 +67,7 @@ class MainWindow(QWidget):
 
         self.previousButton.clicked.connect(self.mapper.toPrevious)
         self.nextButton.clicked.connect(self.mapper.toNext)
+        self.newButton.clicked.connect(self.mapper.toNext)
         self.mapper.currentIndexChanged.connect(self.updateButtons)
 
     def updateButtons(self, row):
@@ -81,6 +84,7 @@ class MainWindow(QWidget):
         layout.addWidget(self.nextButton, 1, 2, 1, 1)
         layout.addWidget(self.typeLabel, 3, 0, 1, 1)
         layout.addWidget(self.typeComboBox, 3, 1, 1, 1)
+        layout.addWidget(self.newButton, 2, 2, 1, 1)
         self.setLayout(layout)
 
         self.setWindowTitle("Combo Widget Mapper")
