@@ -3,7 +3,7 @@ from PySide6.QtWidgets import (
     QApplication, QWidget, QGridLayout, QLabel,
     QLineEdit, QTextEdit
 )
-
+from PySide6.QtCore import Qt
 
 class MyApp(QWidget):
     def __init__(self):
@@ -16,7 +16,7 @@ class MyApp(QWidget):
 
         grid.addWidget(QLabel('Title:'), 0, 0)
         grid.addWidget(QLabel('Author'), 1, 0)
-        grid.addWidget(QLabel('Review:'), 2, 0)
+        grid.addWidget(QLabel('Review:'), 2, 0, Qt.AlignTop)
 
         grid.addWidget(QLineEdit(), 0, 1)
         grid.addWidget(QLineEdit(), 1, 1)
