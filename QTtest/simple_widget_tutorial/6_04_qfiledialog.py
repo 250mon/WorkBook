@@ -29,7 +29,7 @@ class MyApp(QMainWindow):
         self.show()
 
     def showDialog(self):
-        fname = QFileDialog.getOpenFileName(self, 'Open file', './')
+        fname = QFileDialog.getOpenFileName(self, 'Open file', '../')
 
         if fname[0]:
             f = open(fname[0], 'r')

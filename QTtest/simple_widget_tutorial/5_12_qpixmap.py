@@ -11,7 +11,7 @@ class MyApp(QWidget):
         self.initUI()
 
     def initUI(self):
-        pixmap = QPixmap('assets/landscape.png')
+        pixmap = QPixmap('../assets/landscape.png')
 
         lbl_img = QLabel()
         lbl_img.setPixmap(pixmap)

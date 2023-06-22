@@ -1,6 +1,8 @@
 import sys
 import pandas as pd
-from PySide6.QtWidgets import QApplication, QWidget, QTableView, QVBoxLayout, QPushButton
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QTableView, QVBoxLayout, QPushButton
+)
 from PySide6.QtCore import QStringListModel, Slot
 from pandas_model2 import PandasModel
 from textedit_delegate import TextEditDelegate

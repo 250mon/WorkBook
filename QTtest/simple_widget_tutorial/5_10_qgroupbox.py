@@ -1,6 +1,8 @@
 import sys
-from PySide6.QtWidgets import (QApplication, QWidget, QGroupBox, QRadioButton
-, QCheckBox, QPushButton, QMenu, QGridLayout, QVBoxLayout)
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QGroupBox, QRadioButton,
+    QCheckBox, QPushButton, QMenu, QGridLayout, QVBoxLayout
+)
 
 
 class MyApp(QWidget):
