@@ -8,9 +8,11 @@ from PySide6.QtCore import QStringListModel
 
 
 class MainWindow(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, model, type_model, parent=None):
         super().__init__(parent)
-        self.setupModel()
+        # self.setupModel()
+        self.model = model
+        self.type_model = type_model
 
         self.nameLabel = QLabel("Na&me:")
         self.nameEdit = QLineEdit()
@@ -27,36 +29,10 @@ class MainWindow(QWidget):
         self.addressLabel.setBuddy(self.addressEdit)
         self.typeLabel.setBuddy(self.typeComboBox)
 
-        self.typeComboBox.setModel(self.typeModel)
+        self.typeComboBox.setModel(self.type_model)
 
         self.addMapper()
         self.initializeUI()
-
-
-    def setupModel(self):
-        items = ["Home", "Work", "Other"]
-        self.typeModel = QStringListModel(items)
-
-        self.model = QStandardItemModel(5, 3, self)
-        names = ['Alice', 'Bob', 'Carol', 'Donald', 'Emma']
-        addresses = [
-            "<qt>123 Main Street<br/>Market Town</qt>",
-            "<qt>PO Box 32<br/>Mail Handling Service"
-            "<br/>Service City</qt>",
-            "<qt>The Lighthouse<br/>Remote Island</qt>",
-            "<qt>47338 Park Avenue<br/>Big City</qt>",
-            "<qt>Research Station<br/>Base Camp<br/>Big Mountain</qt>"
-        ]
-        types = ["0", "1", "2", "0", "2"]
-
-        for row in range(5):
-            item = QStandardItem(names[row])
-            self.model.setItem(row, 0, item)
-            item = QStandardItem(addresses[row])
-            self.model.setItem(row, 1, item)
-            item = QStandardItem(types[row])
-            self.model.setItem(row, 2, item)
-
 
     def addMapper(self):
         self.mapper = QDataWidgetMapper(self)
@@ -90,10 +66,36 @@ class MainWindow(QWidget):
         self.setWindowTitle("Combo Widget Mapper")
         self.mapper.toFirst()
 
-        self.show()
+def setupModels():
+    items = ["Home", "Work", "Other"]
+    type_model = QStringListModel(items)
+
+    model = QStandardItemModel(5, 3)
+    names = ['Alice', 'Bob', 'Carol', 'Donald', 'Emma']
+    addresses = [
+        "<qt>123 Main Street<br/>Market Town</qt>",
+        "<qt>PO Box 32<br/>Mail Handling Service"
+        "<br/>Service City</qt>",
+        "<qt>The Lighthouse<br/>Remote Island</qt>",
+        "<qt>47338 Park Avenue<br/>Big City</qt>",
+        "<qt>Research Station<br/>Base Camp<br/>Big Mountain</qt>"
+    ]
+    types = ["0", "1", "2", "0", "2"]
+
+    for row in range(5):
+        item = QStandardItem(names[row])
+        model.setItem(row, 0, item)
+        item = QStandardItem(addresses[row])
+        model.setItem(row, 1, item)
+        item = QStandardItem(types[row])
+        model.setItem(row, 2, item)
+
+    return model, type_model
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = MainWindow()
+    model, type_model =  setupModels()
+    window = MainWindow(model, type_model)
+    window.show()
     sys.exit(app.exec())
