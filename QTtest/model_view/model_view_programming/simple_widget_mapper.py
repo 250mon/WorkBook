@@ -54,6 +54,7 @@ class MainWindow(QWidget):
 
     def addMapper(self):
         self.mapper = QDataWidgetMapper(self)
+        self.mapper.setSubmitPolicy(QDataWidgetMapper.AutoSubmit)
         self.mapper.setModel(self.model)
         self.mapper.addMapping(self.nameEdit, 0)
         self.mapper.addMapping(self.addressEdit, 1)
