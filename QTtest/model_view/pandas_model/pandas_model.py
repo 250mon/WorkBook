@@ -45,7 +45,7 @@ class PandasModel(QAbstractTableModel):
         return None
 
     def headerData(self, section: int, orientation: Qt.Orientation,
-                   role: Qt.ItemDataRole) -> str or None:
+                   role=Qt.ItemDataRole) -> str or None:
         """Override method from QAbstractTableModel
 
         Return dataframe index as vertical header data and columns as horizontal header data.
