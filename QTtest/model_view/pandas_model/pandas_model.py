@@ -31,7 +31,7 @@ class PandasModel(QAbstractTableModel):
             return len(self._dataframe.columns)
         return 0
 
-    def data(self, index: QModelIndex, role=Qt.ItemDataRole) -> str or None:
+    def data(self, index: QModelIndex, role=Qt.DisplayRole) -> object:
         """Override method from QAbstractTableModel
 
         Return data cell from the pandas DataFrame
