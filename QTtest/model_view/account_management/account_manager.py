@@ -141,8 +141,8 @@ class MainWindow(QWidget):
         self.model.insertRow(last_row)
         query = QSqlQuery()
         query.exec("SELECT MAX (id) FROM accounts")
-        if query.next():
-            int(query.value(0))
+        # if query.next():
+        #     int(query.value(0))
 
     def deleteItem(self):
         """Delete an entire row from the table."""
