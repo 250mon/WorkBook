@@ -2,6 +2,7 @@
 import sys, os
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtSql import QSqlDatabase, QSqlQuery
+from db_utils import DbConfig
 
 
 # Uncomment to load all relevant information about
@@ -11,63 +12,68 @@ from PySide6.QtSql import QSqlDatabase, QSqlQuery
 
 # os.environ['QT_DEBUG_PLUGINS'] = "1"
 class CreateDatabaseObjects():
-    """Select the SQL driver and set up the database tables."""
-    # Create connection to the database.
-    # If .sql file does not exist, a new .sql file will be created.
-    database = QSqlDatabase.addDatabase("QSQLITE")  # SQLite version 3
-    database.setDatabaseName("databases/FishingStores.sql")
-    if not database.open():
-        print("Unable to open data source file.")
-        print("Connection failed: ", database.lastError().text())
-        sys.exit(1)  # Error code 1 - signifies error in opening file
+    def __init__(self):
 
-    query = QSqlQuery()
-    # Erase tables if they already exist (avoids having duplicate data)
-    query.exec("DROP TABLE IF EXISTS customers")
-    query.exec("DROP TABLE IF EXISTS stores")
-    query.exec("DROP TABLE IF EXISTS orders")
-    query.exec("DROP TABLE IF EXISTS products")
-    query.exec("DROP TABLE IF EXISTS order_products")
 
-    # Create customers table
-    query.exec("""CREATE TABLE customers (
-                customer_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-                first_name VARCHAR (100) NOT NULL,
-                last_name VARCHAR (100) NOT NULL,
-                phone VARCHAR (25),
-                email VARCHAR (255) NOT NULL)""")
-    # Create stores table
-    query.exec("""CREATE TABLE stores (
-                store_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-                store_name VARCHAR (100) NOT NULL,
-                phone VARCHAR (25),
-                state VARCHAR (5))""")
-    # Create orders table
-    # order_status: Pending = 1, Processing = 2, Completed = 3, Rejected = 4
-    query.exec("""CREATE TABLE orders (
-                order_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-                customer_id INTEGER,
-                order_date TEXT NOT NULL,
-                order_status TINYINT NOT NULL,
-                store_id INTEGER NOT NULL,
-                FOREIGN KEY (customer_id) REFERENCES customers (customer_id),
-                FOREIGN KEY (store_id) REFERENCES stores (store_name))""")
-    # Create products table
-    query.exec("""CREATE TABLE products (
-                product_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-                product_name VARCHAR (100) NOT NULL,
-                model_year VARCHAR (100) NOT NULL,
-                list_price DECIMAL (10, 2) NOT NULL)""")
-    # Create order_products table
-    query.exec("""CREATE TABLE order_products (
-                order_id INTEGER,
-                product_id INTEGER,
-                quantity INTEGER NOT NULL,
-                list_price DECIMAL (10, 2) NOT NULL,
-                FOREIGN KEY (order_id) REFERENCES orders (order_id),
-                list_price DECIMAL (10, 2) NOT NULL,
-                FOREIGN KEY (order_id) REFERENCES orders (order_id),
-                FOREIGN KEY (product_id) REFERENCES products (product_name))""")
+    def run(self):
+        """Select the SQL driver and set up the database tables."""
+        # Create connection to the database.
+        # If .sql file does not exist, a new .sql file will be created.
+        database = QSqlDatabase.addDatabase("QSQLITE")  # SQLite version 3
+        database.setDatabaseName("databases/FishingStores.sql")
+        if not database.open():
+            print("Unable to open data source file.")
+            print("Connection failed: ", database.lastError().text())
+            sys.exit(1)  # Error code 1 - signifies error in opening file
+
+        query = QSqlQuery()
+        # Erase tables if they already exist (avoids having duplicate data)
+        query.exec("DROP TABLE IF EXISTS customers")
+        query.exec("DROP TABLE IF EXISTS stores")
+        query.exec("DROP TABLE IF EXISTS orders")
+        query.exec("DROP TABLE IF EXISTS products")
+        query.exec("DROP TABLE IF EXISTS order_products")
+
+        # Create customers table
+        query.exec("""CREATE TABLE customers (
+                    customer_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+                    first_name VARCHAR (100) NOT NULL,
+                    last_name VARCHAR (100) NOT NULL,
+                    phone VARCHAR (25),
+                    email VARCHAR (255) NOT NULL)""")
+        # Create stores table
+        query.exec("""CREATE TABLE stores (
+                    store_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+                    store_name VARCHAR (100) NOT NULL,
+                    phone VARCHAR (25),
+                    state VARCHAR (5))""")
+        # Create orders table
+        # order_status: Pending = 1, Processing = 2, Completed = 3, Rejected = 4
+        query.exec("""CREATE TABLE orders (
+                    order_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+                    customer_id INTEGER,
+                    order_date TEXT NOT NULL,
+                    order_status TINYINT NOT NULL,
+                    store_id INTEGER NOT NULL,
+                    FOREIGN KEY (customer_id) REFERENCES customers (customer_id),
+                    FOREIGN KEY (store_id) REFERENCES stores (store_name))""")
+        # Create products table
+        query.exec("""CREATE TABLE products (
+                    product_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+                    product_name VARCHAR (100) NOT NULL,
+                    model_year VARCHAR (100) NOT NULL,
+                    list_price DECIMAL (10, 2) NOT NULL,
+                    image BYTEA)""")
+        # Create order_products table
+        query.exec("""CREATE TABLE order_products (
+                    order_id INTEGER,
+                    product_id INTEGER,
+                    quantity INTEGER NOT NULL,
+                    list_price DECIMAL (10, 2) NOT NULL,
+                    FOREIGN KEY (order_id) REFERENCES orders (order_id),
+                    list_price DECIMAL (10, 2) NOT NULL,
+                    FOREIGN KEY (order_id) REFERENCES orders (order_id),
+                    FOREIGN KEY (product_id) REFERENCES products (product_name))""")
 
 
 class InsertDataIntoTables():
@@ -105,7 +111,7 @@ class InsertDataIntoTables():
     ]
 
     products = [
-        ['Orca Topwater Lure, 7 1/2"', 27.99, 2019], ['Feather Lure, 6"', 12.99, 2019],
+        ['Orca Topwater Lure, 7 1/2"', 27.99, 2019, '\x01'], ['Feather Lure, 6"', 12.99, 2019],
         ['Sailure Fishing Lure, 5 1/2"', 24.99, 2020], ['Waxwing Saltwater Jig, 1/2 oz.', 13.99, 2020],
         ['7\'3" Bait-Stik Spinning Rod', 59.99, 2018], ['6\'6" Handcrafted Spinning Rod', 119.95, 2019],
         ['7\' Lite Spinning Rod', 169.99, 2020], ['7\' Boat Spinning Rod', 79.99, 2020],
