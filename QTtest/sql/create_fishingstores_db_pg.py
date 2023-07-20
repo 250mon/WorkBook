@@ -19,10 +19,12 @@ class CreateDatabaseObjects:
         self.insert_into_tables()
 
     def create_connection(self):
-        # Create connection to the database.
-        # If .sql file does not exist, a new .sql file will be created.
-        database = QSqlDatabase.addDatabase("QSQLITE")  # SQLite version 3
-        database.setDatabaseName("databases/FishingStores.sql")
+        database = QSqlDatabase.addDatabase("QPSQL")
+        database.setHostName(self.config_options.host)
+        database.setPort(int(self.config_options.port))
+        database.setUserName(self.config_options.user)
+        database.setPassword(self.config_options.passwd)
+        database.setDatabaseName(self.config_options.database)
 
         if not database.open():
             print("Unable to open data source file.")
@@ -35,15 +37,20 @@ class CreateDatabaseObjects:
         """Select the SQL driver and set up the database tables."""
         query = QSqlQuery()
         # Erase tables if they already exist (avoids having duplicate data)
-        query.exec("DROP TABLE IF EXISTS customers")
-        query.exec("DROP TABLE IF EXISTS stores")
-        query.exec("DROP TABLE IF EXISTS orders")
-        query.exec("DROP TABLE IF EXISTS products")
-        query.exec("DROP TABLE IF EXISTS order_products")
+        if not query.exec("DROP TABLE IF EXISTS order_products"):
+            print(query.lastError())
+        if not query.exec("DROP TABLE IF EXISTS products"):
+            print(query.lastError())
+        if not query.exec("DROP TABLE IF EXISTS orders"):
+            print(query.lastError())
+        if not query.exec("DROP TABLE IF EXISTS customers"):
+            print(query.lastError())
+        if not query.exec("DROP TABLE IF EXISTS stores"):
+            print(query.lastError())
 
         # Create customers table
         result = query.exec("""CREATE TABLE customers (
-                    customer_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+                    customer_id SERIAL PRIMARY KEY UNIQUE NOT NULL,
                     first_name VARCHAR (100) NOT NULL,
                     last_name VARCHAR (100) NOT NULL,
                     phone VARCHAR (25),
@@ -51,39 +58,68 @@ class CreateDatabaseObjects:
         if result:
             print('created customers')
         else:
+            print('failed to create customers')
             print(query.lastError())
+            sys.exit(1)
+
         # Create stores table
-        query.exec("""CREATE TABLE stores (
-                    store_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+        result = query.exec("""CREATE TABLE stores (
+                    store_id SERIAL PRIMARY KEY UNIQUE NOT NULL,
                     store_name VARCHAR (100) NOT NULL,
                     phone VARCHAR (25),
                     state VARCHAR (5))""")
+        if result:
+            print('created stores')
+        else:
+            print('failed to create stores')
+            print(query.lastError())
+            sys.exit(1)
+
         # Create orders table
         # order_status: Pending = 1, Processing = 2, Completed = 3, Rejected = 4
-        query.exec("""CREATE TABLE orders (
-                    order_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+        result = query.exec("""CREATE TABLE orders (
+                    order_id SERIAL PRIMARY KEY UNIQUE NOT NULL,
                     customer_id INTEGER,
                     order_date TEXT NOT NULL,
-                    order_status TINYINT NOT NULL,
+                    order_status INTEGER NOT NULL,
                     store_id INTEGER NOT NULL,
                     FOREIGN KEY (customer_id) REFERENCES customers (customer_id),
-                    FOREIGN KEY (store_id) REFERENCES stores (store_name))""")
+                    FOREIGN KEY (store_id) REFERENCES stores (store_id))""")
+        if result:
+            print('created orders')
+        else:
+            print('failed to create orders')
+            print(query.lastError())
+            sys.exit(1)
+
         # Create products table
-        query.exec("""CREATE TABLE products (
-                    product_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+        result = query.exec("""CREATE TABLE products (
+                    product_id SERIAL PRIMARY KEY UNIQUE NOT NULL,
                     product_name VARCHAR (100) NOT NULL,
                     model_year VARCHAR (100) NOT NULL,
                     list_price DECIMAL (10, 2) NOT NULL,
                     image BYTEA)""")
+        if result:
+            print('created products')
+        else:
+            print('failed to create products')
+            print(query.lastError())
+            sys.exit(1)
+
         # Create order_products table
-        query.exec("""CREATE TABLE order_products (
-                    order_id INTEGER,
+        result = query.exec("""CREATE TABLE order_products (
+                    order_id SERIAL,
                     product_id INTEGER,
                     quantity INTEGER NOT NULL,
                     list_price DECIMAL (10, 2) NOT NULL,
-                    list_price DECIMAL (10, 2) NOT NULL,
                     FOREIGN KEY (order_id) REFERENCES orders (order_id),
-                    FOREIGN KEY (product_id) REFERENCES products (product_name))""")
+                    FOREIGN KEY (product_id) REFERENCES products (product_id))""")
+        if result:
+            print('created order_products')
+        else:
+            print('failed to create order_products')
+            print(query.lastError())
+            sys.exit(1)
 
 
     def insert_into_tables(self):
@@ -121,7 +157,7 @@ class CreateDatabaseObjects:
         ]
 
         products = [
-            ['Orca Topwater Lure, 7 1/2"', 27.99, 2019,'0x01'], ['Feather Lure, 6"', 12.99, 2019],
+            ['Orca Topwater Lure, 7 1/2"', 27.99, 2019, '\x01'], ['Feather Lure, 6"', 12.99, 2019],
             ['Sailure Fishing Lure, 5 1/2"', 24.99, 2020], ['Waxwing Saltwater Jig, 1/2 oz.', 13.99, 2020],
             ['7\'3" Bait-Stik Spinning Rod', 59.99, 2018], ['6\'6" Handcrafted Spinning Rod', 119.95, 2019],
             ['7\' Lite Spinning Rod', 169.99, 2020], ['7\' Boat Spinning Rod', 79.99, 2020],
@@ -175,7 +211,6 @@ class CreateDatabaseObjects:
             query.addBindValue(phone)
             query.addBindValue(state)
             result = query.exec()
-            result = query.exec()
             if result:
                 continue
             else:
@@ -216,6 +251,8 @@ class CreateDatabaseObjects:
             if len(products[i]) > 3:
                 image = products[i][3]
                 query.addBindValue(image)
+            else:
+                query.addBindValue(None)
             result = query.exec()
             if result:
                 continue
