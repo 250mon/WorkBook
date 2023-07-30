@@ -1,7 +1,9 @@
 import sys, csv
-from PySide6.QtWidgets import (QApplication, QWidget,
-                               QTableView, QAbstractItemView, QVBoxLayout)
-from PySide6.QtGui import (QStandardItemModel, QStandardItem)
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QTableView, QAbstractItemView,
+    QVBoxLayout
+)
+from PySide6.QtGui import QStandardItemModel, QStandardItem
 
 
 class MainWindow(QWidget):
