@@ -15,7 +15,6 @@ from create_mail_model import create_mail_model
 from basic_sort_filter_model import MainWindow
 
 
-
 class MySortFilterProxyModel(QSortFilterProxyModel):
     def __init__(self, parent):
         super().__init__(parent)
