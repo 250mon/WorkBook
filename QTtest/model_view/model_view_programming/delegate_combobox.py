@@ -73,21 +73,21 @@ class MainWindow(QWidget):
         """Create and arrange widgets in the main window"""
         # self.model = QStandardItemModel()
 
-        table_view = QTableView()
-        table_view.setSelectionMode(
+        self.table_view = QTableView()
+        self.table_view.setSelectionMode(
             QAbstractItemView.SelectionMode.ExtendedSelection)
-        table_view.setModel(self.model)
+        self.table_view.setModel(self.model)
 
-        delegate = ComboBoxDelegate(table_view)
-        # table_view.setItemDelegate(delegate)
-        table_view.setItemDelegateForColumn(1, delegate)
+        self.delegate = ComboBoxDelegate(self.table_view)
+        # self.table_view.setItemDelegate(delegate)
+        self.table_view.setItemDelegateForColumn(1, self.delegate)
 
         # Set initial row and column values
         # self.model.setRowCount(3)
         # self.model.setColumnCount(4)
 
         main_v_box = QVBoxLayout()
-        main_v_box.addWidget(table_view)
+        main_v_box.addWidget(self.table_view)
         self.setLayout(main_v_box)
 
     def loadCSVFile(self):
