@@ -214,6 +214,7 @@ class MainWindow(QMainWindow):
                                         ['2, 0', 1, 'three']])
 
 
+        # when using multiple delegates, self is
         self.d1 = CheckBoxDelegate()
         self.d2 = ComboBoxDelegate()
         # HERE IS THE PROBLEM - I can comment either one of the two following lines and the script runs as expected.
