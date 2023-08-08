@@ -47,7 +47,7 @@ class MySortFilterProxyModel(QSortFilterProxyModel):
 
         result1 = self.filterRegularExpression().match(self.sourceModel().data(index0)).hasMatch()
         result2 = self.filterRegularExpression().match(self.sourceModel().data(index1)).hasMatch()
-        result3 = self.data_in_range(self.sourceModel().data(index2).date())
+        result3 = self.data_in_range(self.sourceModel().data(index2).qdate())
         result = (result1 or result2) and result3
 
         return result
