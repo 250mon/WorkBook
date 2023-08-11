@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>../../assets/web.png</file>
+    <file>../../assets/print.png</file>
+    <file>../../assets/save.png</file>
+    <file>../../assets/edit.png</file>
+</qresource>
+</RCC>
