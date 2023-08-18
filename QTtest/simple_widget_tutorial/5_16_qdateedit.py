@@ -14,7 +14,7 @@ class MyApp(QWidget):
         lbl = QLabel('QDateEdit')
 
         dateedit = QDateEdit(self)
-        dateedit.setDate(QDate.currentDate())
+        dateedit.setDate(QDate.currentDate().addMonths(-6))
         dateedit.setMinimumDate(QDate(1900, 1, 1))
         dateedit.setMaximumDate(QDate(2100, 12, 31))
         # dateedit.setDateRange(QDate(1900, 1, 1), QDate(2100, 12, 31))
