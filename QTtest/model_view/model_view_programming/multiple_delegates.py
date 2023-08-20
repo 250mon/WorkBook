@@ -11,8 +11,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import (
     QApplication, QHeaderView, QMainWindow, QMenuBar, QComboBox,
-    QSizePolicy, QStatusBar, QTableView, QWidget, QItemDelegate,
-    QStyle
+    QSizePolicy, QStatusBar, QTableView, QWidget, QItemDelegate
 )
 
 from PySide6 import QtWidgets
@@ -76,7 +75,7 @@ class ComboBoxDelegate(QItemDelegate):
     def paint(self, painter, option, index):
         text = self.items[index.row()]
         option.text = text
-        QApplication.style().drawControl(QStyle.CE_ItemViewItem, option, painter)
+        QtWidgets.QApplication.style().drawControl(QtWidgets.QStyle.CE_ItemViewItem, option, painter)
 
 
 class CheckBoxDelegate(QItemDelegate):
