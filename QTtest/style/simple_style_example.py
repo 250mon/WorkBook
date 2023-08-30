@@ -8,9 +8,9 @@ if __name__ == "__main__":
     title.setAlignment(Qt.AlignCenter)
     title.setObjectName("title")
 
-    w = QLabel("This is a placeholder text")
-    w.setAlignment(Qt.AlignCenter)
-    w.setStyleSheet("""
+    custom_label = QLabel("This is a placeholder text")
+    custom_label.setAlignment(Qt.AlignCenter)
+    custom_label.setStyleSheet("""
         background-color: #262626;
         color: #FFFFFF;
         font-family: Titillium;
@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     vbox = QVBoxLayout()
     vbox.addWidget(title)
-    vbox.addWidget(w)
+    vbox.addWidget(custom_label)
     main = QWidget()
     main.setLayout(vbox)
     main.show()
