@@ -12,7 +12,6 @@ from PySide6.QtWidgets import (
 from PySide6.QtWidgets import QTreeView, QGroupBox, QVBoxLayout
 from PySide6.QtGui import QColor, QPalette
 from create_mail_model import create_mail_model
-from basic_sort_filter_model import MainWindow
 
 
 class MySortFilterProxyModel(QSortFilterProxyModel):
@@ -26,7 +25,7 @@ class MySortFilterProxyModel(QSortFilterProxyModel):
         right_data: str or QDateTime = self.sourceModel().data(right)
 
         if isinstance(left_data, QDateTime):
-            return left_data.toDateTime() < right_data.toDateTime()
+            return left_data < right_data
         else:
             email_pattern = QRegularExpression("[\\w\\.]*@[\\w\\.]*")
             if left.column() == 1:
@@ -124,12 +123,12 @@ class FilterWidget(QWidget):
         self.filter_column_label.setBuddy(self.filter_column_combobox)
 
         self.from_date_edit = QDateEdit()
-        self.from_date_edit.setDate(QDate(1970, 1, 1))
+        self.from_date_edit.setDate(QDate(2006, 1, 1))
         self.from_label = QLabel("From:")
         self.from_label.setBuddy(self.from_date_edit)
 
         self.to_date_edit = QDateEdit()
-        self.to_date_edit.setDate(QDate(2099, 12, 31))
+        self.to_date_edit.setDate(QDate(2008, 12, 31))
         self.to_label = QLabel("To:")
         self.to_label.setBuddy(self.to_date_edit)
 
@@ -192,7 +191,7 @@ class FilterWidget(QWidget):
         if regular_expression.isValid():
             self.filter_pattern_line_edit.setToolTip('')
             self.proxy_model.setFilterRegularExpression(regular_expression)
-            set_text_color(self.filter_pattern_line_edit, Qt.black)
+            set_text_color(self.filter_pattern_line_edit, text_color(self.style().standardPalette()))
         else:
             self.filter_pattern_line_edit.setToolTip(regular_expression.errorString())
             self.proxy_model.setFilterRegularExpression(QRegularExpression())
@@ -208,7 +207,7 @@ class FilterWidget(QWidget):
             Qt.CaseSensitive if self.sort_case_sensitivity_checkbox.isChecked() else Qt.CaseInsensitive)
 
     def date_filter_changed(self):
-        self.proxy_model.set_filter_maximum_date(self.from_date_edit.date())
+        self.proxy_model.set_filter_minimum_date(self.from_date_edit.date())
         self.proxy_model.set_filter_maximum_date(self.to_date_edit.date())
 
 
