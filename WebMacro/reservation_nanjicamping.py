@@ -1,9 +1,6 @@
 import time
-
-import selenium
 from selenium import webdriver
 from selenium.webdriver.common.alert import Alert
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -12,7 +9,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from time import sleep
 from handle_ids import HandleIds
 from threading import Thread
-import sys
 
 class NanjiCamping(Thread):
     def __init__(self, url, date, type='camping'):
