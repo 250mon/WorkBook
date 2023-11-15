@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "filters": {
+    "io_filter": {
+      "name: "app.io"
+    }
+  },
+  "formatters": {
+    "simple": {
+      "format": "%(asctime)s - %(message)s",
+      "datefmt": "%y%j-%H%M%S"
+    },
+    "detailed": {
+      "format": "%(asctime)s - %(pathname):%(lineno) - %(message)s"
+    }
+  },
+  "handlers": {
+    "stderr": {
+      "class": "logging.StreamHandler",
+      "level": "INFO",
+      "filters": ["io_filter"],
+      "formatter": "simple",
+      "stream": "ext://sys.stderr"
+    },
+    "alert": {
+      "class": "logging.handlers.SMTPHandler",
+      "level": "ERROR",
+      "filters": "detailed",
+      "mailhost": "smtp.skynet.com",
+      "fromaddr": "logging@skynet.com",
+      "toaddrs": ["admin1@skynet.com", "admin2@skynet.com"],
+      "subject": "System Alert"
+    }
+  },
+  "loggers": {
+    "app": {
+      "handlers": ["stderr", "alert"],
+      "level": "WARNING"
+    },
+    "app.io": {
+      "level": "INFO"
+    }
+  }
+}
