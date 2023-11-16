@@ -9,8 +9,9 @@ class LogMixin:
     def logger(self):
         if not self.__loggerConfigured:
             with open('log_config.yaml', 'rt') as f:
-                config = yaml.load(f.read())
+                config = yaml.load(f, Loader=yaml.FullLoader)
                 logging.config.dictConfig(config)
+                print("logging config applied")
             self.__loggerConfigured = True
         name = '.'.join([self.__class__.__name__])
         return logging.getLogger(name)
