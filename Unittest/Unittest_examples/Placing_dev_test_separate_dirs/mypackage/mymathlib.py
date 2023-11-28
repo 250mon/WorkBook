@@ -1,6 +1,11 @@
+from lib import read_file
+
+
 class MyMathLib:
     def __init__(self):
         """Constructor for this class..."""
+        read_file.read_main_config()
+        read_file.read_config()
         print("Creating object: " + self.__class__.__name__)
 
     def add(self, x, y):

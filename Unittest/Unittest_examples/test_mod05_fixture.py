@@ -6,7 +6,7 @@ def setUpModule():
     print("\nIn setUpModule()...")
 
 def tearDownModule():
-    """called once, before anything else in this module"""
+    """called once, after everything else in this module"""
     print("\nIn tearDownModule()...")
 
 
@@ -19,15 +19,15 @@ class TestClass06(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """called once, before any test"""
+        """called once, after all tests, if setUpClass successful"""
         print("\nIn tearDownClass()...")
 
     def setUp(self):
-        """called multiple times, before eery test method"""
+        """called multiple times, before every test method"""
         print("\nIn setUp()...")
 
     def tearDown(self):
-        """called multiple times, before eery test method"""
+        """called multiple times, after every test method"""
         print("\nIn tearDown()...")
 
     def test_case01(self):
