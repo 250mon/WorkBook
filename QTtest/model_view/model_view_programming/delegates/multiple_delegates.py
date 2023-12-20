@@ -1,17 +1,11 @@
 import sys
 from PySide6.QtCore import (
-    QCoreApplication, QDate, QDateTime, QLocale, QMetaObject,
-    QObject, QPoint, QRect, QSize, QTime, QUrl, Qt, QAbstractTableModel,
+    QCoreApplication, QMetaObject, QRect, Qt, QAbstractTableModel,
     QModelIndex, QEvent
 )
-from PySide6.QtGui import (
-    QBrush, QColor, QConicalGradient, QCursor, QFont, QFontDatabase,
-    QGradient, QIcon, QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform
-)
 from PySide6.QtWidgets import (
-    QApplication, QHeaderView, QMainWindow, QMenuBar, QComboBox,
-    QSizePolicy, QStatusBar, QTableView, QWidget, QItemDelegate
+    QApplication, QMainWindow, QMenuBar, QComboBox,
+    QStatusBar, QTableView, QWidget, QItemDelegate
 )
 
 from PySide6 import QtWidgets

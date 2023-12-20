@@ -62,11 +62,8 @@ class FileListModel(QAbstractListModel):
         items_to_fetch = min(BATCH_SIZE, remainder)
 
         self.beginInsertRows(QModelIndex(), start, start + items_to_fetch)
-
         self._file_count += items_to_fetch
-
         self.endInsertRows()
-
         self.number_populated.emit(self._path, start, items_to_fetch, total)
 
     @Slot(str)

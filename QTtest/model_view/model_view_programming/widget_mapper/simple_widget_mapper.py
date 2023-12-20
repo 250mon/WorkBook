@@ -1,9 +1,7 @@
 import sys
 from PySide6.QtWidgets import (
-    QApplication, QWidget, QTableView, QAbstractItemView,
-    QHBoxLayout, QSpinBox, QLabel, QLineEdit, QTextEdit,
-    QPushButton, QDataWidgetMapper, QGridLayout, QRadioButton,
-    QComboBox
+    QApplication, QWidget, QSpinBox, QLabel, QLineEdit, QTextEdit,
+    QPushButton, QDataWidgetMapper, QGridLayout
 )
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 
