@@ -50,7 +50,10 @@ class TreeModel(QAbstractItemModel):
 
         return None
 
-    def index(self, row: int, column: int, parent: QModelIndex = QModelIndex()) -> QModelIndex:
+    def index(self,
+              row: int,
+              column: int,
+              parent: QModelIndex = QModelIndex()) -> QModelIndex:
         if parent.isValid() and parent.column() != 0:
             return QModelIndex()
 
