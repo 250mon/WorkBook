@@ -1,11 +1,10 @@
-import pandas as pd
 from PySide6.QtCore import QModelIndex, Qt, QAbstractItemModel
 from treeitem import TreeItem
 
 
 class TreeModel(QAbstractItemModel):
 
-    def __init__(self, headers: list, data: pd.DataFrame, parent=None):
+    def __init__(self, headers: list, data: dict, parent=None):
         super().__init__(parent)
 
         self.root_data = headers
@@ -62,5 +61,20 @@ class TreeModel(QAbstractItemModel):
         if child_item:
             return self.createIndex(row, column, child_item)
         return QModelIndex()
+
+    def parent(self, index: QModelIndex = QModelIndex()) -> QModelIndex:
+        if not index.isValid():
+            return QModelIndex()
+
+        child_item: TreeItem = self.get_item(index)
+        if child_item:
+            parent_item: TreeItem = child_item.parent()
+        else:
+            parent_item = None
+
+        if parent_item == self.root_item or not parent_item:
+            return QModelIndex()
+
+        return self.createIndex(parent_item.child_number(), 0, parent_item)
 
 
