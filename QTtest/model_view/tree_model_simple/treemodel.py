@@ -77,4 +77,37 @@ class TreeModel(QAbstractItemModel):
 
         return self.createIndex(parent_item.child_number(), 0, parent_item)
 
+    def rowCount(self, parent: QModelIndex = QModelIndex()) -> int:
+        if parent.isValid() and parent.column() > 0:
+            return 0
 
+        parent_item: TreeItem = self.get_item(parent)
+        if not parent_item:
+            return 0
+        return parent_item.child_count()
+
+    def setData(self, index: QModelIndex, value, role: int) -> bool:
+        if role != Qt.EditRole:
+            return False
+
+        item: TreeItem = self.get_item(index)
+        result: bool = item.set_data(index.column(), value)
+
+        if result:
+            self.dataChanged.emit(index, index, [Qt.DisplayRole, Qt.EditRole])
+
+        return result
+
+    def setHeaderData(self, section: int, orientation: Qt.Orientation,
+                      value, role: int = None) -> bool:
+        if role != Qt.EditRole or orientation != Qt.Horizontal:
+            return False
+
+        result: bool = self.root_item.set_data(section, value)
+
+        if result:
+            self.headerDataChanged.emit(orientation, section, section)
+
+        return result
+
+    def setup_model_data(self, data: dict, parent: TreeItem):

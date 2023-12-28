@@ -20,6 +20,7 @@ class MainWindow(QMainWindow):
         second_row = self.prepare_row("111", "222", "333")
         # adding a row to an item starts a subtree
         prepared_row[0].appendRow(second_row)
+        prepared_row[0].appendRows(second_row)
 
         self._tree_view.setModel(self._standard_model)
         self._tree_view.expandAll()
