@@ -111,3 +111,5 @@ class TreeModel(QAbstractItemModel):
         return result
 
     def setup_model_data(self, data: dict, parent: TreeItem):
+        parents = [parent]
+
