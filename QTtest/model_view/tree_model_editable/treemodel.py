@@ -175,19 +175,26 @@ class TreeModel(QAbstractItemModel):
                 column_data = line[position:].split("\t")
                 column_data = [string for string in column_data if string]
 
+                # if a new indentation is found, the last child becomes
+                # a parent of the newly indented items
                 if position > indentations[-1]:
                     if parents[-1].child_count() > 0:
                         parents.append(parents[-1].last_child())
                         indentations.append(position)
                 else:
+                    # when indentations are reduced, the parents and
+                    # indentations are removed until the specific indentation
                     while position < indentations[-1] and parents:
                         parents.pop()
                         indentations.pop()
 
+                # the line will be inserted as a tree item
                 parent: TreeItem = parents[-1]
                 col_count = self.root_item.column_count()
+                # a template tree item is inserted
                 parent.insert_children(parent.child_count(), 1, col_count)
 
+                # the template tree item is filled with data
                 for column in range(len(column_data)):
                     child = parent.last_child()
                     child.set_data(column, column_data[column])

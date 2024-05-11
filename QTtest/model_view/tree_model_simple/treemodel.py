@@ -23,9 +23,9 @@ class TreeModel(QAbstractItemModel):
 
         item: TreeItem = self.get_item(index)
 
-        return item.data(index.column)
+        return item.data(index.column())
 
-    def flags(self, index: QModelIndex) -> Qt.ItemFlag:
+    def flags(self, index: QModelIndex) -> Qt.ItemFlags:
         if not index.isValid():
             return Qt.NoItemFlags
 
@@ -62,6 +62,27 @@ class TreeModel(QAbstractItemModel):
             return self.createIndex(row, column, child_item)
         return QModelIndex()
 
+    def insertColumns(self, position: int, columns: int,
+                      parent: QModelIndex = QModelIndex()) -> bool:
+        self.beginInsertColumns(parent, position, position + columns - 1)
+        success: bool = self.root_item.insert_columns(position, columns)
+        self.endInsertColumns()
+
+        return success
+
+    def insertRows(self, position: int, rows: int,
+                   parent: QModelIndex = QModelIndex()) -> bool:
+        parent_item: TreeItem = self.get_item(parent)
+        if not parent_item:
+            return False
+
+        self.beginInsertRows(parent, position, position + rows - 1)
+        column_count = self.root_item.column_count()
+        success: bool = parent_item.insert_children(position, rows, column_count)
+        self.endInsertRows()
+
+        return success
+
     def parent(self, index: QModelIndex = QModelIndex()) -> QModelIndex:
         if not index.isValid():
             return QModelIndex()
@@ -76,6 +97,29 @@ class TreeModel(QAbstractItemModel):
             return QModelIndex()
 
         return self.createIndex(parent_item.child_number(), 0, parent_item)
+
+    def removeColumns(self, position: int, columns: int,
+                      parent: QModelIndex = QModelIndex()) -> bool:
+        self.beginRemoveColumns(parent, position, position + columns - 1)
+        success: bool = self.root_item.remove_columns(position, columns)
+        self.endRemoveColumns()
+
+        if self.root_item.column_count() == 0:
+            self.removeRows(0, self.rowCount())
+
+        return success
+
+    def removeRows(self, position: int, rows: int,
+                   parent: QModelIndex = QModelIndex()) -> bool:
+        parent_item: TreeItem = self.get_item(parent)
+        if not parent_item:
+            return False
+
+        self.beginRemoveRows(parent, position, position + rows - 1)
+        success: bool = parent_item.remove_children(position, rows)
+        self.endRemoveRows()
+
+        return success
 
     def rowCount(self, parent: QModelIndex = QModelIndex()) -> int:
         if parent.isValid() and parent.column() > 0:
@@ -111,5 +155,34 @@ class TreeModel(QAbstractItemModel):
         return result
 
     def setup_model_data(self, data: dict, parent: TreeItem):
-        parents = [parent]
+        col_count = self.root_item.column_count()
 
+        def setup_tree(child_content: dict or list, parent_item: TreeItem):
+            if isinstance(child_content, list):
+                # The first column is Title which is not data
+                data_col_count = col_count - 1
+                if data_col_count != len(child_content):
+                    print(f"Number of columns({len(child_content)}) of data"
+                          f" does not fit in to data_col_count({data_col_count})")
+                    child_content = child_content[:col_count]
+                for i, val in enumerate(child_content, start=1):
+                    parent_item.set_data(i, val)
+                return
+
+            for key, value in child_content.items():
+                # a template tree item is inserted
+                parent_item.insert_children(parent_item.child_count(), 1, col_count)
+                child_item = parent_item.last_child()
+                child_item.set_data(0, key)
+                setup_tree(value, child_item)
+
+        setup_tree(data, parent)
+
+    def _repr_recursion(self, item: TreeItem, indent: int = 0) -> str:
+        result = " " * indent + repr(item) + "\n"
+        for child in item.child_items:
+            result += self._repr_recursion(child, indent + 2)
+        return result
+
+    def __repr__(self) -> str:
+        return self._repr_recursion(self.root_item)

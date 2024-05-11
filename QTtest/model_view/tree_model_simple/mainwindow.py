@@ -56,12 +56,22 @@ class MainWindow(QMainWindow):
         about_qt_action = help_menu.addAction("About Qt", qApp.aboutQt)
         about_qt_action.setShortcut("F1")
 
-        self.setWindowTitle("Editable Tree Model")
+        self.setWindowTitle("Simple Tree Model")
 
-        headers = ["Title", "Description"]
+        headers = ["Title", "Description", "More"]
+        # all keys belong to Title
+        # only list values go to Description and More
+        data = {'a':
+                    {'b1':
+                         {'c1': ['df', 'test1'],
+                          'c2': ['lkjl', 'test2']},
+                     'b2':
+                         {'c3': ['sdfdf', 'miiii'],
+                          'c4': ['23423', 'loooo']},
+                    },
+               }
 
-        file = Path(__file__).parent / "default.txt"
-        self.model = TreeModel(headers, file.read_text(), self)
+        self.model = TreeModel(headers, data, self)
 
         if "-t" in sys.argv:
             QAbstractItemModelTester(self.model, self)
