@@ -2,7 +2,7 @@ import sys, io
 from PySide6.QtWidgets import QApplication, QHBoxLayout, QWidget, QLabel, QVBoxLayout
 from PySide6.QtGui import QPixmap, QImage
 from PySide6.QtCore import Qt
-from PIL import Image, ImageQt
+from PIL import Image
 
 
 class MyApp(QWidget):
